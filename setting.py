@@ -54,8 +54,14 @@ PROXY_FETCHER = [
     "freeProxy07",
     "freeProxy08",
     "freeProxy09",
-    "freeProxy10"
+    "freeProxy10",
+    "wallProxy01",
+    "wallProxy02",
+    "freeProxy11",
+    "freeProxy12",
+    "wallProxy03",
 ]
+
 
 # ############# proxy validator #################
 # 代理验证目标网站

@@ -12,10 +12,7 @@
 """
 __author__ = 'JHao'
 
-from test import testProxyValidator
-from test import testConfigHandler
-from test import testLogHandler
-from test import testDbClient
+from test import testProxyValidator, testConfigHandler, testLogHandler, testDbClient
 
 if __name__ == '__main__':
     print("ConfigHandler:")
