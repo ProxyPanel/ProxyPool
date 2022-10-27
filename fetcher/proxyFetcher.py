@@ -219,9 +219,7 @@ class ProxyFetcher(object):
 
     @staticmethod
     def wallProxy03(page_cout=15):
-        """
-        mrhinkydink.com
-        """
+        """ mrhinkydink.com """
         urls = ['http://www.mrhinkydink.com/proxies.htm'] + ['http://www.mrhinkydink.com/proxies%s.htm' % n for n in
                                                              range(1, page_cout + 1)]
         request = WebRequest()
@@ -234,15 +232,28 @@ class ProxyFetcher(object):
                 if ip:
                     yield "%s:%s" % (ip, port)
 
-    # @staticmethod
-    # def freeProxy13(page_cout=10):
-    #     """ www.cnproxy.com """
-    #     urls = ['https://www.cnproxy.com/proxy%s.html' % n for n in range(1, page_cout + 1)]
-    #     for url in urls:
-    #         r = WebRequest().get(url, timeout=10)
-    #         proxies = re.findall(r'<tr><td>(\d+\.\d+\.\d+\.\d+)<SCRIPT type=text/javascript>document.write\(\"\:\"(.+)\)</SCRIPT></td><td>(HTTP|SOCKS4)\s*', r.text)
-    #         for proxy in proxies:
-    #             yield ":".join(proxy)
+    @staticmethod
+    def freeProxy13(page_cout=10):
+        """ www.cnproxy.com """
+
+        def decodePort(input_string):
+            decode_map = {'v': 3, 'm': 4, 'a': 2, 'l': 9, 'q': 0, 'b': 5, 'i': 7, 'w': 6, 'r': 8, 'c': 1}
+            return ''.join(str(decode_map[i]) for i in re.findall(r'\w', input_string))
+
+        urls = ['https://www.cnproxy.com/proxy%s.html' % n for n in range(1, page_cout + 1)]
+        for url in urls:
+            r = WebRequest().get(url, timeout=10)
+            proxies = re.findall(r'<tr><td>(\d+\.\d+\.\d+\.\d+)<SCRIPT type=text/javascript>document.write'
+                                 r'\(\"\:\"(.+)\)</SCRIPT></td><td>(HTTP|SOCKS4)\s*', r.text)
+            for proxy in proxies:
+                yield "%s:%s" % (proxy[0], decodePort(proxy[1]))
+
+    @staticmethod
+    def freeProxy14():
+        url = 'https://proxypool.scrape.center/all'
+        r = WebRequest().get(url, timeout=10)
+        for proxy in r.text.splitlines():
+            yield proxy
 
     if __name__ == '__main__':
         p = ProxyFetcher()

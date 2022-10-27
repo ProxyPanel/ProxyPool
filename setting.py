@@ -60,6 +60,8 @@ PROXY_FETCHER = [
     "freeProxy11",
     "freeProxy12",
     "wallProxy03",
+    "freeProxy13",
+    "freeProxy14"
 ]
 
 
