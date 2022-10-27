@@ -12,6 +12,7 @@
 """
 __author__ = 'JHao'
 
+import base64
 import json
 import re
 import time
@@ -52,8 +53,8 @@ class ProxyFetcher(object):
         """
         代理66 http://www.66ip.cn/
         """
-        urls = ['http://www.66ip.cn/%s.html' % n for n in range(1, page_count + 1)] + \
-               ['http://www.66ip.cn/areaindex_%s/%s.html' % (i, j) for i in range(1, 35) for j in range(1, 3)]
+        urls = ['http://www.66ip.cn/%s.html' % n for n in range(1, page_count + 1)] + [
+            'http://www.66ip.cn/areaindex_%s/%s.html' % (i, j) for i in range(1, 35) for j in range(1, 3)]
         for url in urls:
             resp = WebRequest().get(url, timeout=10).tree
             for i, tr in enumerate(resp.xpath("(//table)[3]//tr")):
@@ -65,8 +66,8 @@ class ProxyFetcher(object):
     @staticmethod
     def freeProxy03(page_count=10):
         """ 开心代理 """
-        target_urls = ['http://www.kxdaili.com/dailiip/%s/%s.html#ip'
-                       % (i, j) for i in range(1, 3) for j in range(1, page_count + 1)]
+        target_urls = ['http://www.kxdaili.com/dailiip/%s/%s.html#ip' % (i, j) for i in range(1, 3) for j in
+                       range(1, page_count + 1)]
         for url in target_urls:
             tree = WebRequest().get(url).tree
             for tr in tree.xpath("//table[@class='active']//tr")[1:]:
@@ -90,8 +91,8 @@ class ProxyFetcher(object):
     @staticmethod
     def freeProxy05(page_count=4839):
         """ 快代理 https://www.kuaidaili.com """
-        urls = ['https://www.kuaidaili.com/free/inha/%s/' % i for i in range(1, page_count + 1)] + \
-               ['https://www.kuaidaili.com/free/intr/%s/' % i for i in range(1, page_count + 1)]
+        urls = ['https://www.kuaidaili.com/free/inha/%s/' % i for i in range(1, page_count + 1)] + [
+            'https://www.kuaidaili.com/free/intr/%s/' % i for i in range(1, page_count + 1)]
         for url in urls:
             tree = WebRequest().get(url).tree
             proxy_list = tree.xpath('.//table//tr')
@@ -114,8 +115,8 @@ class ProxyFetcher(object):
     @staticmethod
     def freeProxy07():
         """ 云代理 """
-        urls = ['http://www.ip3366.net/free/?stype=1&page=%s' % i for i in range(1, 8)] + \
-               ['http://www.ip3366.net/free/?stype=2&page=%s' % i for i in range(1, 4)]
+        urls = ['http://www.ip3366.net/free/?stype=1&page=%s' % i for i in range(1, 8)] + [
+            'http://www.ip3366.net/free/?stype=2&page=%s' % i for i in range(1, 4)]
         for url in urls:
             r = WebRequest().get(url, timeout=10)
             proxies = re.findall(r'<td>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})</td>[\s\S]*?<td>(\d+)</td>', r.text)
@@ -144,9 +145,9 @@ class ProxyFetcher(object):
                 yield ":".join(tr.xpath("./td/text()")[0:2]).strip()
 
     @staticmethod
-    def freeProxy10(page_cout=23):
+    def freeProxy10(page_count=23):
         """ 89免费代理 """
-        urls = ['https://www.89ip.cn/index_%s.html' % i for i in range(1, page_cout + 1)]
+        urls = ['https://www.89ip.cn/index_%s.html' % i for i in range(1, page_count + 1)]
         for url in urls:
             r = WebRequest().get(url, timeout=10)
             proxies = re.findall(
@@ -168,8 +169,8 @@ class ProxyFetcher(object):
             x_csrf_token = re.findall('X-CSRFToken": "(.*?)"', index_resp)
             if x_csrf_token:
                 data = {"http": "on", "ping": "3000", "country": "cn", "ports": ""}
-                proxy_resp = session.post("https://pzzqz.com/", verify=False,
-                                          headers={"X-CSRFToken": x_csrf_token[0]}, json=data).json()
+                proxy_resp = session.post("https://pzzqz.com/", verify=False, headers={"X-CSRFToken": x_csrf_token[0]},
+                                          json=data).json()
                 tree = etree.HTML(proxy_resp["proxy_html"])
                 for tr in tree.xpath("//tr"):
                     ip = "".join(tr.xpath("./td[1]/text()"))
@@ -193,12 +194,12 @@ class ProxyFetcher(object):
                 yield ':'.join(proxy)
 
     @staticmethod
-    def freeProxy11(page_cout=10):
+    def freeProxy11(page_count=10):
         """
         https://proxy-list.org/english/index.php
         :return:
         """
-        urls = ['https://proxy-list.org/english/index.php?p=%s' % n for n in range(1, page_cout + 1)]
+        urls = ['https://proxy-list.org/english/index.php?p=%s' % n for n in range(1, page_count + 1)]
         request = WebRequest()
         import base64
         for url in urls:
@@ -208,8 +209,9 @@ class ProxyFetcher(object):
                 yield base64.b64decode(proxy).decode()
 
     @staticmethod
-    def freeProxy12(page_cout=6):
-        urls = ['https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-%s' % n for n in range(1, page_cout + 1)]
+    def freeProxy12(page_count=6):
+        urls = ['https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-%s' % n for n in range(1, page_count + 1)] + [
+            'https://list.proxylistplus.com/google-List-%s' % n for n in range(1, 3)]
         request = WebRequest()
         for url in urls:
             r = request.get(url, timeout=10)
@@ -218,47 +220,147 @@ class ProxyFetcher(object):
                 yield ':'.join(proxy)
 
     @staticmethod
-    def wallProxy03(page_cout=15):
+    def wallProxy03(page_count=15):
         """ mrhinkydink.com """
         urls = ['http://www.mrhinkydink.com/proxies.htm'] + ['http://www.mrhinkydink.com/proxies%s.htm' % n for n in
-                                                             range(1, page_cout + 1)]
+                                                             range(1, page_count + 1)]
         request = WebRequest()
         for url in urls:
-            res = request.get(url, timeout=10)
-            atree = res.tree
-            for td in atree.xpath("//table//tr[@class='text']"):
+            tree = request.get(url, timeout=10).tree
+            for td in tree.xpath("//table//tr[@class='text']"):
                 ip = "".join(td.xpath('./td[1]/text()'))
                 port = "".join(td.xpath('./td[2]/text()'))
                 if ip:
                     yield "%s:%s" % (ip, port)
 
     @staticmethod
-    def freeProxy13(page_cout=10):
+    def freeProxy13(page_count=10):
         """ www.cnproxy.com """
 
-        def decodePort(input_string):
-            decode_map = {'v': 3, 'm': 4, 'a': 2, 'l': 9, 'q': 0, 'b': 5, 'i': 7, 'w': 6, 'r': 8, 'c': 1}
-            return ''.join(str(decode_map[i]) for i in re.findall(r'\w', input_string))
+        def find_decode_maps(maps):
+            decode_map = {}
+            for pin in maps:
+                decode_map[pin[0]] = pin[1]
+            return decode_map
 
-        urls = ['https://www.cnproxy.com/proxy%s.html' % n for n in range(1, page_cout + 1)]
+        def decodePort(decode_map, input_string):
+            return ''.join(decode_map[i] for i in re.findall(r'\w', input_string))
+
+        urls = ['https://www.cnproxy.com/proxy%s.html' % n for n in range(1, page_count + 1)] + [
+            'https://www.cnproxy.com/proxyedu%s.html' % i for i in range(1, 3)],
         for url in urls:
             r = WebRequest().get(url, timeout=10)
+            maps = find_decode_maps(re.findall(r'(\w)\=\"(\d)\";', r.text))
             proxies = re.findall(r'<tr><td>(\d+\.\d+\.\d+\.\d+)<SCRIPT type=text/javascript>document.write'
                                  r'\(\"\:\"(.+)\)</SCRIPT></td><td>(HTTP|SOCKS4)\s*', r.text)
             for proxy in proxies:
-                yield "%s:%s" % (proxy[0], decodePort(proxy[1]))
+                yield "%s:%s" % (proxy[0], decodePort(maps, proxy[1]))
 
     @staticmethod
     def freeProxy14():
-        url = 'https://proxypool.scrape.center/all'
-        r = WebRequest().get(url, timeout=10)
-        for proxy in r.text.splitlines():
-            yield proxy
+        urls = ['https://proxypool.scrape.center/all', 'http://ab57.ru/downloads/proxyold.txt',
+                'proxylists.net/http_highanon.txt', 'https://rmccurdy.com/.scripts/proxy/good.txt']
+        for url in urls:
+            r = WebRequest().get(url, timeout=10)
+            for proxy in r.text.splitlines():
+                yield proxy
+
+    @staticmethod
+    def wallProxy04(page_count=10):
+        """ mrhinkydink.com """
+
+        def find_decode_maps(maps):
+            decode_map = {}
+            for pin in maps:
+                decode_map[pin[0]] = pin[1]
+            return decode_map
+
+        def decode_port(decode_map, input_string):
+            return ''.join(decode_map[i] for i in re.findall(r'\w', input_string))
+
+        urls = ['http://nntime.com/proxy-list-%02d.htm' % n for n in range(1, page_count + 1)]
+        request = WebRequest()
+        for url in urls:
+            res = request.get(url, timeout=10)
+            maps = find_decode_maps(re.findall(r'(\w)\=(\d)', res.text))
+            proxies = re.findall(r'<td>(\d+\.\d+\.\d+\.\d+).*\(\"\:\"(.+)\)', res.text)
+            for proxy in proxies:
+                yield "%s:%s" % (proxy[0], decode_port(maps, proxy[1]))
+
+    @staticmethod
+    def freeProxy15():
+        urls = ['https://www.my-proxy.com/free-%s.html' % n for n in
+                ['elite-proxy', 'anonymous-proxy', 'transparent-proxy', 'socks-4-proxy', 'socks-5-proxy',
+                 'proxy-list'] + ['proxy-list-%s' % m for m in range(2, 11)]]
+        request = WebRequest()
+        for url in urls:
+            r = request.get(url, timeout=10)
+            proxies = re.findall(r'(\d+\.\d+\.\d+\.\d+\:\d+)', r.text)
+            for proxy in proxies:
+                yield proxy
+
+    @staticmethod
+    def freeProxy16():
+        urls = ['https://www.us-proxy.org', 'https://free-proxy-list.net', 'https://www.socks-proxy.net',
+                'https://www.sslproxies.org']
+        request = WebRequest()
+        for url in urls:
+            tree = request.get(url, timeout=10).tree
+            for tr in tree.xpath("//section[@id='list']//tbody/tr"):
+                ip = "".join(tr.xpath('./td[1]/text()'))
+                port = "".join(tr.xpath('./td[2]/text()'))
+                if ip:
+                    yield "%s:%s" % (ip, port)
+
+    @staticmethod
+    def freeProxy17():
+        urls = ['https://atomintersoft.com/%s_proxy_list' % n for n in
+                ['transparent', 'anonymous', 'high_anonymity_elite']]
+        request = WebRequest()
+        for url in urls:
+            tree = request.get(url, timeout=10).tree
+            for proxy in tree.xpath("//table/thead/tr//td[1]/text()[1]"):
+                if proxy:
+                    yield proxy
+
+    @staticmethod
+    def freeProxy18():
+        urls = ['http://proxydb.net/?protocol=http']  # todo: 翻页需要offset Post 请求
+        for url in urls:
+            tree = WebRequest().get(url, timeout=10, verify=False).tree
+            for proxy in tree.xpath('//tbody/tr/td[1]/a/text()'):
+                yield proxy
+
+    @staticmethod
+    def freeProxy19():
+        url = 'https://cool-proxy.net/proxies.json'
+        req_text = WebRequest().get(url, timeout=10).text
+        for proxy in json.loads(req_text):
+            ip = proxy['ip']
+            port = proxy['port']
+            if ip:
+                yield "%s:%s" % (ip, port)
+
+    # @staticmethod
+    # def wallProxy05(page_count=135):
+    #     """ http://free-proxy.cz/ """
+    #
+    #     urls = ['http://free-proxy.cz/en/proxylist/main/%s' % n for n in range(1, page_count + 1)]
+    #     request = WebRequest()
+    #     for url in urls:
+    #         res = request.get(url, timeout=10)
+    #         tree = res.tree
+    #         for tr in tree.xpath("//table[@id='proxy_list']/tbody/tr"):
+    #             proxy = tr.xpath('.//text()')
+    #             ip = base64.b64decode(re.findall(r'\"(\w+)\"', proxy[0])[0])
+    #             port = proxy[1]
+    #             if ip:
+    #                 yield "%s:%s" % (ip, port)
+
 
     if __name__ == '__main__':
         p = ProxyFetcher()
         for _ in p.freeProxy06():
             print(_)
 
-    # http://nntime.com/proxy-list-01.htm
     # https://www.cnblogs.com/bonelee/p/9250281.html
