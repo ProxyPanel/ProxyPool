@@ -44,9 +44,10 @@ TABLE_NAME = 'use_proxy'
 
 # ###### config the proxy fetch function ######
 PROXY_FETCHER = ["freeProxy01", "freeProxy02", "freeProxy03", "freeProxy04", "freeProxy05", "freeProxy06",
-    "freeProxy07", "freeProxy08", "freeProxy09", "freeProxy10", "freeProxy11", "freeProxy12", "freeProxy13",
-    "freeProxy14", "freeProxy15", "freeProxy16", "freeProxy17", "freeProxy18", "freeProxy19", "wallProxy01",
-    "wallProxy02", "wallProxy03", "wallProxy04"]
+                 "freeProxy07", "freeProxy08", "freeProxy09", "freeProxy10", "freeProxy11", "freeProxy12",
+                 "freeProxy13", "freeProxy14", "freeProxy15", "freeProxy16", "freeProxy17", "freeProxy18",
+                 "freeProxy19", "wallProxy01", "wallProxy02", "wallProxy03", "wallProxy04", "wallProxy05",
+                 "freeProxy20", "freeProxy21"]
 
 # ############# proxy validator #################
 # 代理验证目标网站
